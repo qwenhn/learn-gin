@@ -1,0 +1,21 @@
+@baseURL=http://localhost:8080
+
+###
+# Get Demo
+GET {{baseURL}}/demo
+
+###
+# Get Users
+GET {{baseURL}}/users
+
+###
+# Get User by ID
+GET {{baseURL}}/users/1
+
+###
+# Get Products
+GET {{baseURL}}/products
+
+###
+# Get Product Detail
+GET {{baseURL}}/products/detail/laptop?price=1000&color=blue

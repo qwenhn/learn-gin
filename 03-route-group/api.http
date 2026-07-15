@@ -1,0 +1,74 @@
+@baseURL=http://localhost:8080
+
+###
+# Get list users
+GET {{baseURL}}/v1/users
+
+###
+# Get users by ID
+GET {{baseURL}}/v1/users/123
+
+###
+# Create user
+POST {{baseURL}}/v1/users
+
+###
+# Update user
+PUT {{baseURL}}/v1/users/123
+
+###
+# Delete user
+DELETE {{baseURL}}/v1/users/123
+
+###
+# Get user by UUID
+GET {{baseURL}}/v1/users/uuid/77f43d38-a3dd-499d-a566-b2f22a452bc2
+
+###
+# Get list products
+GET {{baseURL}}/v1/products?search=123
+
+###
+# Get products by ID
+GET {{baseURL}}/v1/products/123
+
+###
+# Create product
+POST {{baseURL}}/v1/products
+
+###
+# Update product
+PUT {{baseURL}}/v1/products/123
+
+###
+# Delete product
+DELETE {{baseURL}}/v1/products/123
+
+###
+# Get by slug
+GET {{baseURL}}/v1/products/by-slug/123-asb
+
+###
+# Get by category
+GET {{baseURL}}/v1/categories/go1
+
+#================================
+###
+# Get list users
+GET {{baseURL}}/v2/users
+
+###
+# Get users by ID
+GET {{baseURL}}/v2/users/123
+
+###
+# Create user
+POST {{baseURL}}/v2/users
+
+###
+# Update user
+PUT {{baseURL}}/v2/users/123
+
+###
+# Delete user
+DELETE {{baseURL}}/v2/users/123

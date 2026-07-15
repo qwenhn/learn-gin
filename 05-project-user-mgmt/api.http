@@ -1,0 +1,42 @@
+@baseUrl=http://localhost:8080
+
+### Get all users
+GET {{baseUrl}}/api/v1/users
+X-API-Key: 72bbd13d-8a1a-4bdf-9793-b81ee3744978
+
+### Create a user
+# @name createUserRequest
+POST {{baseUrl}}/api/v1/users
+X-API-Key: 72bbd13d-8a1a-4bdf-9793-b81ee3744978
+Content-Type: "application/json"
+
+{
+    "Name": "User name 1",
+	"Email":    "user1@gmail.com",
+	"Age":      25,
+	"Password": "Asdf123!@",
+	"Status":   1,
+	"Level":    2
+}
+
+### Get by uuid
+GET {{baseUrl}}/api/v1/users/{{createUserRequest.response.body.data.uuid}}
+X-API-Key: 72bbd13d-8a1a-4bdf-9793-b81ee3744978
+
+### Update a user
+PUT {{baseUrl}}/api/v1/users/{{createUserRequest.response.body.data.uuid}}
+Content-Type: "application/json"
+X-API-Key: 72bbd13d-8a1a-4bdf-9793-b81ee3744978
+
+{
+    "Name": "Update user name 1",
+	"Email":    "user1@gmail.com",
+	"Age":      25,
+	"Password": "Asdf123!@",
+	"Status":   1,
+	"Level":    2
+}
+
+### Delete a user
+DELETE {{baseUrl}}/api/v1/users/{{createUserRequest.response.body.data.uuid}}
+X-API-Key: 72bbd13d-8a1a-4bdf-9793-b81ee3744978

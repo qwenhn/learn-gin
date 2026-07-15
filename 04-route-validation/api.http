@@ -1,0 +1,129 @@
+@baseURL=http://localhost:8080
+
+###
+# Get users by ID
+GET {{baseURL}}/v1/users/123
+
+###
+# Get user by UUID
+GET {{baseURL}}/v1/users/uuid/a76646bc-e40b-4e79-be61-3a7e68deffa2
+
+###
+# Get list products
+GET {{baseURL}}/v1/products?search=Qwe-123&email=qwe@gmail.com&date=2026-07-14
+
+###
+# Get by slug
+GET {{baseURL}}/v1/products/by-slug/azs
+
+###
+# Create a product
+POST {{baseURL}}/v1/products
+Content-Type: "application/json"
+
+{
+    "name": "Product name",
+    "price": 10000,
+    "display": false,
+    "product_image": {
+        "image_name": "Image name",
+        "image_link": "img-1.png"
+    },
+    "tags": ["a", "b", "c", "d"],
+    "product_attributes": [
+        {
+            "attribute_name": "Attribute name",
+            "attribute_value": "attribute value"
+        }
+    ],
+    "product_info": {
+        "info_1": {
+            "info_key": "info key",
+            "info_value": "info value"
+        }
+    },
+    "product_metadata": {
+        "meta_1":{
+            "meta_key": "Meta key"
+        }
+    }
+}
+
+###
+# Get by category
+GET {{baseURL}}/v1/categories/123
+
+###
+# Get all news
+GET {{baseURL}}/v1/news
+X-API-Key: ab2a7a8a-d601-4bf7-b0e2-dd00e5459392
+
+###
+# Get all news by slug
+GET {{baseURL}}/v1/news/123
+
+### Create a news
+POST {{baseURL}}/v1/news
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+New title
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="status"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="image.jpg"
+Content-Type: image/jpeg
+
+< ./image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Create a news with image
+POST {{baseURL}}/v1/news
+Content-Type: application/json
+
+{
+  "title": "New title",
+  "status": "1"
+}
+
+### Upload file
+POST {{baseURL}}/v1/news/upload-file
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+New title
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="status"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="image.jpg"
+Content-Type: image/jpeg
+
+< ./image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Upload multiple file
+POST {{baseURL}}/v1/news/upload-multiple-file
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+New title
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="status"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="images"; filename="image.jpg"
+Content-Type: image/jpeg
+
+< ./image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--

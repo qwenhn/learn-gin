@@ -1,0 +1,138 @@
+package handler
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+
+	"github.com/qwenhn/gin-restful-api/05-project-user-mgmt/internal/dto"
+	"github.com/qwenhn/gin-restful-api/05-project-user-mgmt/internal/service"
+	"github.com/qwenhn/gin-restful-api/05-project-user-mgmt/internal/utils"
+	"github.com/qwenhn/gin-restful-api/05-project-user-mgmt/internal/validation"
+)
+
+type UserHandler struct {
+	service service.UserService
+}
+
+func NewUserHandler(service service.UserService) *UserHandler {
+	return &UserHandler{
+		service: service,
+	}
+}
+
+type GetAllUsersParam struct {
+	Search string `form:"search" binding:"omitempty,min=3,max=50,search"`
+	Page   int    `form:"page" binding:"omitempty,gte=1"`
+	Limit  int    `form:"limit" binding:"omitempty,gte=1,lte=100"`
+}
+
+type GetUserByUUIDParam struct {
+	Uuid string `uri:"uuid" binding:"uuid"`
+}
+
+func (uh *UserHandler) GetAllUsers(ctx *gin.Context) {
+	var params GetAllUsersParam
+
+	if err := ctx.ShouldBindQuery(&params); err != nil {
+		utils.ResponseValidator(ctx, validation.HandleValidationErrors(err))
+		return
+	}
+
+	if params.Page == 0 {
+		params.Page = 1
+	}
+
+	if params.Limit == 0 {
+		params.Limit = 10
+	}
+
+	users, err := uh.service.GetAllUsers(params.Search, params.Page, params.Limit)
+	if err != nil {
+		utils.ResponseError(ctx, err)
+		return
+	}
+
+	usersDTO := dto.MapUsersToDTO(users)
+
+	utils.ResponseSuccess(ctx, http.StatusOK, usersDTO)
+}
+
+func (uh *UserHandler) CreateUser(ctx *gin.Context) {
+	var input dto.CreateUserInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		utils.ResponseValidator(ctx, validation.HandleValidationErrors(err))
+		return
+	}
+
+	user := input.MapCreateInputToModel()
+
+	createdUser, err := uh.service.CreateUser(user)
+	if err != nil {
+		utils.ResponseError(ctx, err)
+		return
+	}
+
+	userDTO := dto.MapUserToDTO(createdUser)
+
+	utils.ResponseSuccess(ctx, http.StatusCreated, &userDTO)
+}
+
+func (uh *UserHandler) GetUserByUUID(ctx *gin.Context) {
+	var params GetUserByUUIDParam
+
+	if err := ctx.ShouldBindUri(&params); err != nil {
+		utils.ResponseValidator(ctx, validation.HandleValidationErrors(err))
+		return
+	}
+
+	user, err := uh.service.GetByUUID(params.Uuid)
+	if err != nil {
+		utils.ResponseError(ctx, err)
+		return
+	}
+
+	userDTO := dto.MapUserToDTO(user)
+
+	utils.ResponseSuccess(ctx, http.StatusCreated, &userDTO)
+}
+
+func (uh *UserHandler) UpdateUser(ctx *gin.Context) {
+	var params GetUserByUUIDParam
+	if err := ctx.ShouldBindUri(&params); err != nil {
+		utils.ResponseValidator(ctx, validation.HandleValidationErrors(err))
+		return
+	}
+
+	var input dto.UpdateUserInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		utils.ResponseValidator(ctx, validation.HandleValidationErrors(err))
+		return
+	}
+
+	user := input.MapUpdateInputToModel()
+
+	updatedUser, err := uh.service.UpdateUser(params.Uuid, user)
+	if err != nil {
+		utils.ResponseError(ctx, err)
+		return
+	}
+
+	userDTO := dto.MapUserToDTO(updatedUser)
+
+	utils.ResponseSuccess(ctx, http.StatusOK, &userDTO)
+}
+func (uh *UserHandler) DeleteUser(ctx *gin.Context) {
+	var params GetUserByUUIDParam
+	if err := ctx.ShouldBindUri(&params); err != nil {
+		utils.ResponseValidator(ctx, validation.HandleValidationErrors(err))
+		return
+	}
+
+	if err := uh.service.DeleteUser(params.Uuid); err != nil {
+		utils.ResponseError(ctx, err)
+		return
+	}
+
+	utils.ResponseStatusCode(ctx, http.StatusNoContent)
+}

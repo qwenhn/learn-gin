@@ -1,0 +1,101 @@
+@baseURL=http://localhost:8080
+@APIKey=21cdd695-223f-4893-957e-f3f273c5eeac
+
+### Get all users
+GET {{baseURL}}/api/v1/users
+X-API-KEY: {{APIKey}}
+
+### Create a user
+# @name requestCreateUser
+POST {{baseURL}}/api/v1/users
+X-API-KEY: {{APIKey}}
+Content-Type: "application/json"
+
+{
+    "name": "User name 1",
+    "email": "user1@gmail.com",
+    "age": 18,
+    "password": "Asd123!@",
+    "status": 1,
+    "level": 1
+}
+
+### Get user by uuid
+GET {{baseURL}}/api/v1/users/{{requestCreateUser.response.body.data.uuid}}
+X-API-KEY: {{APIKey}}
+
+### Get user by soft deleted
+GET {{baseURL}}/api/v1/users/soft-deleted
+
+### Update user
+PUT {{baseURL}}/api/v1/users/{{requestCreateUser.response.body.data.uuid}}
+X-API-KEY: {{APIKey}}
+Content-Type: "application/json"
+
+{
+    "name": "User name 1 update"
+}
+
+### Delete user
+DELETE {{baseURL}}/api/v1/users/{{requestCreateUser.response.body.data.uuid}}
+X-API-KEY: {{APIKey}}
+
+### Restore user
+PUT {{baseURL}}/api/v1/users/{{requestCreateUser.response.body.data.uuid}}/restore
+X-API-KEY: {{APIKey}}
+
+### Trash user
+DELETE  {{baseURL}}/api/v1/users/{{requestCreateUser.response.body.data.uuid}}/trash
+X-API-KEY: {{APIKey}}
+
+### Auth Login
+# @name requestAuthLogin
+POST {{baseURL}}/api/v1/auth/login
+X-API-KEY: {{APIKey}}
+Content-Type: "application/json"
+
+{
+    "email": "user1@gmail.com",
+    "password": "Asd123!@"
+}
+
+### Auth Logout
+POST {{baseURL}}/api/v1/auth/logout
+X-API-KEY: {{APIKey}}
+Content-Type: application/json
+Authorization: Bearer {{requestAuthLogin.response.body.data.access_token}}
+
+{
+    "refresh_token": "{{requestAuthLogin.response.body.data.refresh_token}}"
+}
+
+### Auth refresh
+POST {{baseURL}}/api/v1/auth/refresh
+X-API-KEY: {{APIKey}}
+Content-Type: application/json
+Authorization: Bearer {{requestAuthLogin.response.body.data.access_token}}
+
+{
+    "refresh_token": "{{requestAuthLogin.response.body.data.refresh_token}}"
+}
+
+### Auth forgot password
+POST {{baseURL}}/api/v1/auth/forgot-password
+X-API-KEY: {{APIKey}}
+Content-Type: application/json
+Authorization: Bearer {{requestAuthLogin.response.body.data.access_token}}
+
+{
+    "email": "user1@gmail.com"
+}
+
+### Auth reset password
+POST {{baseURL}}/api/v1/auth/reset-password
+X-API-KEY: {{APIKey}}
+Content-Type: application/json
+Authorization: Bearer {{requestAuthLogin.response.body.data.access_token}}
+
+{
+    "token": "",
+    "new_password": "Asd123!@!"
+}
